@@ -1,9 +1,15 @@
 backend:
   name: github
-  repo: JankoV12/drobky.cz
+  repo: drobkycz/drobky.cz
   branch: main
+  base_url: https://auth.drobky.cz
+  auth_endpoint: /auth
 
 local_backend: true
+
+site_url: https://drobky.cz
+display_url: https://drobky.cz
+publish_mode: editorial_workflow
 
 media_folder: public/uploads
 public_folder: /uploads
