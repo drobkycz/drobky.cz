@@ -8,6 +8,7 @@ const outputPath = path.resolve(__dirname, '../src/data/instagram.json');
 
 const token = process.env.INSTAGRAM_ACCESS_TOKEN;
 const userId = process.env.INSTAGRAM_USER_ID;
+const apiVersion = process.env.INSTAGRAM_GRAPH_VERSION || 'v24.0';
 
 const defaultPayload = {
   updatedAt: new Date().toISOString(),
@@ -27,18 +28,19 @@ const writePayload = async (payload) => {
   await writeFile(outputPath, JSON.stringify(payload, null, 2) + '\n', 'utf-8');
 };
 
-if (!token || !userId) {
+if (!token) {
   const existing = await readExisting();
   await writePayload({
     ...existing,
     updatedAt: new Date().toISOString()
   });
-  console.log('Instagram fetch skipped: missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_USER_ID');
+  console.log('Instagram fetch skipped: missing INSTAGRAM_ACCESS_TOKEN');
   process.exit(0);
 }
 
 const fields = ['id', 'caption', 'media_type', 'media_url', 'thumbnail_url', 'permalink', 'timestamp'].join(',');
-const url = `https://graph.instagram.com/${userId}/media?fields=${fields}&access_token=${token}`;
+const endpoint = userId ? `${userId}/media` : 'me/media';
+const url = `https://graph.facebook.com/${apiVersion}/${endpoint}?fields=${fields}&limit=12&access_token=${token}`;
 
 try {
   const existing = await readExisting();

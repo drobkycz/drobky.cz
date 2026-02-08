@@ -36,10 +36,11 @@ Cache feedu je v souboru `src/data/instagram.json`.
 Lokální refresh:
 
 ```bash
-INSTAGRAM_ACCESS_TOKEN=... INSTAGRAM_USER_ID=... npm run fetch:instagram
+INSTAGRAM_ACCESS_TOKEN=... npm run fetch:instagram
 ```
 
 Pokud proměnné chybí, skript nespadne a zachová existující cache.
+`INSTAGRAM_USER_ID` je volitelný (když chybí, používá se endpoint `/me/media`).
 
 ### GitHub Actions cron
 
@@ -48,7 +49,7 @@ Workflow je v `/.github/workflows/instagram-cache.yml` a běží každých 6 hod
 Nastav v repozitáři secrets:
 
 - `INSTAGRAM_ACCESS_TOKEN`
-- `INSTAGRAM_USER_ID`
+- `INSTAGRAM_USER_ID` (volitelné)
 
 ## Admin (Decap CMS)
 
