@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const outputPath = path.resolve(__dirname, '../src/data/instagram.json');
 
-const token = process.env.INSTAGRAM_ACCESS_TOKEN;
+const token = process.env.INSTAGRAM_ACCESS_TOKEN?.trim();
 const userId = process.env.INSTAGRAM_USER_ID;
 const apiVersion = process.env.INSTAGRAM_GRAPH_VERSION || 'v24.0';
 
@@ -40,21 +40,31 @@ if (!token) {
 
 const fields = ['id', 'caption', 'media_type', 'media_url', 'thumbnail_url', 'permalink', 'timestamp'].join(',');
 const endpoint = userId ? `${userId}/media` : 'me/media';
-const url = `https://graph.facebook.com/${apiVersion}/${endpoint}?fields=${fields}&limit=12&access_token=${token}`;
+const urls = [
+  `https://graph.instagram.com/${endpoint}?fields=${fields}&limit=12&access_token=${token}`,
+  `https://graph.facebook.com/${apiVersion}/${endpoint}?fields=${fields}&limit=12&access_token=${token}`
+];
 
 try {
   const existing = await readExisting();
-  const response = await fetch(url);
-  const raw = await response.text();
-  const json = raw ? JSON.parse(raw) : {};
+  let json = null;
+  let lastError = '';
 
-  if (!response.ok) {
-    const message = json?.error?.message ?? `Instagram API failed with status ${response.status}`;
-    throw new Error(message);
+  for (const url of urls) {
+    const response = await fetch(url);
+    const raw = await response.text();
+    const parsed = raw ? JSON.parse(raw) : {};
+
+    if (response.ok && !parsed?.error?.message) {
+      json = parsed;
+      break;
+    }
+
+    lastError = parsed?.error?.message ?? `Instagram API failed with status ${response.status}`;
   }
 
-  if (json?.error?.message) {
-    throw new Error(json.error.message);
+  if (!json) {
+    throw new Error(lastError || 'Instagram API request failed');
   }
 
   const items = (json.data ?? []).slice(0, 12).map((item) => ({
