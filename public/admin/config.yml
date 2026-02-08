@@ -1,0 +1,35 @@
+backend:
+  name: github
+  repo: JankoV12/drobky.cz
+  branch: main
+
+local_backend: true
+
+media_folder: public/uploads
+public_folder: /uploads
+
+locale: cs
+
+collections:
+  - name: posts
+    label: Články
+    folder: src/content/posts
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Titulek, name: title, widget: string }
+      - { label: Perex, name: excerpt, widget: text }
+      - { label: Datum publikace, name: publishDate, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false }
+      - { label: Doba čtení, name: readTime, widget: string, default: '5 min' }
+      - label: Rubrika
+        name: category
+        widget: select
+        options:
+          - { label: Rybařina, value: rybarina }
+          - { label: Střípky, value: stripky }
+          - { label: Názory, value: nazory }
+      - { label: Hlavní obrázek, name: coverImage, widget: image }
+      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Obsah, name: body, widget: markdown }

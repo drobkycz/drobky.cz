@@ -1,0 +1,35 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const label =
+  post.data.category === 'rybarina' ? 'Rybařina' : post.data.category === 'stripky' ? 'Střípky' : 'Názory';
+---
+
+<Base title={`${post.data.title} | drobky.cz`} description={post.data.excerpt}>
+  <article class="mx-auto max-w-prose space-y-6">
+    <p class="text-base font-semibold text-accent">{label}</p>
+    <h1 class="font-heading text-6xl leading-tight">{post.data.title}</h1>
+    <p class="text-lg text-muted">{post.data.publishDate.toLocaleDateString('cs-CZ')} • {post.data.readTime}</p>
+
+    <img src={post.data.coverImage} alt={post.data.title} class="w-full rounded-card border border-border object-cover shadow-soft" />
+
+    <div class="article-content space-y-4 text-xl leading-relaxed text-text">
+      <Content />
+    </div>
+  </article>
+</Base>

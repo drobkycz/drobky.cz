@@ -1,0 +1,59 @@
+---
+import feed from '../data/instagram.json';
+
+type IgItem = {
+  id: string;
+  image: string;
+  caption?: string;
+  url?: string;
+};
+
+const items = (feed.items ?? []) as IgItem[];
+const maxItems = 12;
+const visibleItems = items.slice(0, maxItems);
+const hasItems = visibleItems.length > 0;
+---
+
+{
+  !hasItems ? (
+    <div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+      {Array.from({ length: 12 }).map((_, index) => (
+        <div
+          class:list={[
+            'animate-pulse rounded-card border border-border bg-card/60',
+            index === 0 ? 'col-span-2 row-span-2 min-h-56 md:min-h-64 lg:min-h-72' : 'min-h-28 md:min-h-32 lg:min-h-40'
+          ]}
+        ></div>
+      ))}
+    </div>
+  ) : (
+    <div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+      {visibleItems.map((item, index) => (
+        <a
+          href={item.url ?? '#'}
+          target={item.url ? '_blank' : undefined}
+          rel={item.url ? 'noreferrer' : undefined}
+          class:list={[
+            'group relative overflow-hidden rounded-card border border-border bg-card',
+            index === 0 ? 'col-span-2 row-span-2' : ''
+          ]}
+        >
+          <img
+            src={item.image}
+            alt={item.caption ?? 'Instagram post'}
+            loading="lazy"
+            class="h-full min-h-28 w-full object-cover md:min-h-32 lg:min-h-40"
+          />
+          <div class="absolute inset-0 flex items-end justify-between bg-gradient-to-t from-black/50 to-transparent p-3 opacity-0 transition group-hover:opacity-100">
+            <span class="line-clamp-1 text-sm font-medium text-white">{item.caption ?? 'Instagram'}</span>
+            <svg viewBox="0 0 24 24" class="h-5 w-5 text-white" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+              <circle cx="12" cy="12" r="4.2"></circle>
+              <circle cx="17.4" cy="6.6" r="1"></circle>
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+  )
+}

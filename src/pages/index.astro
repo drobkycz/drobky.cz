@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import InstagramFeed from '../components/InstagramFeed.astro';
+import PostCard from '../components/PostCard.astro';
+import CategoryCards from '../components/CategoryCards.astro';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 3);
+---
+
+<Base title="drobky.cz | Drobky z vody i ze života" description="Muškaření, výpravy, rodina. Občas poznámka k tomu, co se děje.">
+  <section class="mx-auto max-w-prose space-y-7 py-6 text-center md:py-10">
+    <h1 class="font-heading text-6xl leading-tight tracking-tight text-text md:text-8xl">
+      Drobky z vody i ze života.
+    </h1>
+    <p class="text-2xl text-muted md:text-4xl">
+      Muškaření, výpravy, rodina. Občas poznámka k tomu, co se děje.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-3 text-lg font-medium">
+      <span class="rounded-full border border-border bg-card px-4 py-1.5 text-muted">#soca</span>
+      <span class="rounded-full border border-border bg-card px-4 py-1.5 text-muted">#muskarskyTip</span>
+      <span class="rounded-full border border-border bg-card px-4 py-1.5 text-muted">#stripky</span>
+    </div>
+  </section>
+
+  <section class="space-y-5 py-6 md:py-8">
+    <div class="flex items-center gap-5">
+      <h2 class="font-heading text-5xl">Z Instagramu</h2>
+      <div class="section-rule"></div>
+    </div>
+    <InstagramFeed />
+  </section>
+
+  <section class="space-y-6 py-8 md:py-10">
+    <div class="flex items-center gap-5">
+      <h2 class="font-heading text-5xl">Nejnovější drobky</h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="grid gap-5 md:grid-cols-3">
+      {
+        posts.map((post) => (
+          <PostCard
+            category={post.data.category}
+            title={post.data.title}
+            excerpt={post.data.excerpt}
+            date={post.data.publishDate}
+            readTime={post.data.readTime}
+            image={post.data.coverImage}
+            href={`/clanky/${post.slug}`}
+          />
+        ))
+      }
+    </div>
+    <div class="flex justify-center pt-2">
+      <a
+        href="/rybarina"
+        class="rounded-xl border border-text bg-card px-6 py-3 text-xl font-semibold transition hover:border-accent hover:text-accent"
+      >
+        Všechny články →
+      </a>
+    </div>
+  </section>
+
+  <section class="space-y-6 py-8 md:py-10">
+    <div class="flex items-center gap-5">
+      <h2 class="font-heading text-5xl">Rubriky</h2>
+      <div class="section-rule"></div>
+    </div>
+    <CategoryCards />
+  </section>
+</Base>

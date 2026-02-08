@@ -1,0 +1,90 @@
+---
+import '../styles/tailwind.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'drobky.cz',
+  description = 'Muskareni, vypravy, rodina. Obcas poznamka k tomu, co se deje.'
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="cs" class="paper-bg">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen bg-bg text-text antialiased">
+    <header
+      class="site-header sticky top-0 z-50 border-b border-transparent bg-bg/95 backdrop-blur transition-colors"
+      data-site-header
+    >
+      <div class="container-shell flex h-20 items-center justify-between gap-8">
+        <a href="/" class="font-heading text-4xl leading-none tracking-tight">
+          drobky.cz<span class="text-amber-600">.</span>
+        </a>
+
+        <nav class="hidden items-center gap-10 text-2xl font-medium md:flex">
+          <a href="/rybarina" class="text-muted transition hover:text-text">Rybarina</a>
+          <a href="/stripky" class="text-muted transition hover:text-text">Stripky</a>
+          <a href="/o-mne" class="text-muted transition hover:text-text">O mne</a>
+        </nav>
+
+        <a
+          href="https://instagram.com"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Instagram"
+          class="rounded-full p-2 text-muted transition hover:bg-card hover:text-text"
+        >
+          <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle cx="17.4" cy="6.6" r="1"></circle>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <main class="container-shell py-10 md:py-14">
+      <slot />
+    </main>
+
+    <footer class="mt-16 border-t border-border py-8">
+      <div class="container-shell flex flex-wrap items-center justify-center gap-4 text-muted">
+        <span class="inline-flex items-center gap-2">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+            <circle cx="12" cy="12" r="4.2"></circle>
+            <circle cx="17.4" cy="6.6" r="1"></circle>
+          </svg>
+          2026 drobky.cz
+        </span>
+        <span aria-hidden="true">|</span>
+        <a href="mailto:kontakt@drobky.cz" class="transition hover:text-accent">Kontakt</a>
+      </div>
+    </footer>
+
+    <script>
+      const header = document.querySelector('[data-site-header]');
+      const toggleBorder = () => {
+        if (!header) return;
+        header.classList.toggle('border-border', window.scrollY > 4);
+      };
+      toggleBorder();
+      window.addEventListener('scroll', toggleBorder, { passive: true });
+    </script>
+  </body>
+</html>

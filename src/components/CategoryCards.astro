@@ -1,0 +1,44 @@
+---
+const categories = [
+  {
+    title: 'Rybarina',
+    text: 'Tipy, triky a zazitky od vody.',
+    href: '/rybarina',
+    image:
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'
+  },
+  {
+    title: 'Stripky',
+    text: 'Stripky z rodinneho zivota.',
+    href: '/stripky',
+    image:
+      'https://images.unsplash.com/photo-1472207241423-9e30d6cf27ca?auto=format&fit=crop&w=1200&q=80'
+  },
+  {
+    title: 'O mne',
+    text: 'Kdo jsem a co me bavi.',
+    href: '/o-mne',
+    image:
+      'https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=1200&q=80'
+  }
+];
+---
+
+<div class="grid gap-5 md:grid-cols-3">
+  {
+    categories.map((item) => (
+      <a href={item.href} class="group overflow-hidden rounded-card border border-border bg-card shadow-soft">
+        <img
+          src={item.image}
+          alt={item.title}
+          class="h-40 w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+          loading="lazy"
+        />
+        <div class="space-y-2 p-5">
+          <h3 class="font-heading text-4xl">{item.title}</h3>
+          <p class="text-lg text-muted">{item.text}</p>
+        </div>
+      </a>
+    ))
+  }
+</div>
