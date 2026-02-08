@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import InstagramFeed from '../components/InstagramFeed.astro';
 import PostCard from '../components/PostCard.astro';
@@ -8,6 +8,32 @@ import CategoryCards from '../components/CategoryCards.astro';
 const posts = (await getCollection('posts', ({ data }) => !data.draft))
   .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
   .slice(0, 3);
+
+const rubrikyEntry = await getEntry('settings', 'rubriky');
+const categories =
+  rubrikyEntry?.data.categories ?? [
+    {
+      title: 'Rybařina',
+      text: 'Tipy, triky a zážitky od vody.',
+      href: '/rybarina',
+      image:
+        'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+      title: 'Střípky',
+      text: 'Střípky z rodinného života.',
+      href: '/stripky',
+      image:
+        'https://images.unsplash.com/photo-1472207241423-9e30d6cf27ca?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+      title: 'O mně',
+      text: 'Kdo jsem a co mě baví.',
+      href: '/o-mne',
+      image:
+        'https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=1200&q=80'
+    }
+  ];
 ---
 
 <Base title="drobky.cz | Drobky z vody i ze života" description="Muškaření, výpravy, rodina. Občas poznámka k tomu, co se děje.">
@@ -68,6 +94,6 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft))
       <h2 class="font-heading text-5xl">Rubriky</h2>
       <div class="section-rule"></div>
     </div>
-    <CategoryCards />
+    <CategoryCards categories={categories} />
   </section>
 </Base>

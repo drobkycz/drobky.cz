@@ -1,27 +1,16 @@
 ---
-const categories = [
-  {
-    title: 'Rybarina',
-    text: 'Tipy, triky a zazitky od vody.',
-    href: '/rybarina',
-    image:
-      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'
-  },
-  {
-    title: 'Stripky',
-    text: 'Stripky z rodinneho zivota.',
-    href: '/stripky',
-    image:
-      'https://images.unsplash.com/photo-1472207241423-9e30d6cf27ca?auto=format&fit=crop&w=1200&q=80'
-  },
-  {
-    title: 'O mne',
-    text: 'Kdo jsem a co me bavi.',
-    href: '/o-mne',
-    image:
-      'https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=1200&q=80'
-  }
-];
+interface CategoryItem {
+  title: string;
+  text: string;
+  href: string;
+  image: string;
+}
+
+interface Props {
+  categories: CategoryItem[];
+}
+
+const { categories } = Astro.props;
 ---
 
 <div class="grid gap-5 md:grid-cols-3">

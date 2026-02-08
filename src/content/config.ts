@@ -13,6 +13,21 @@ const posts = defineCollection({
   })
 });
 
+const settings = defineCollection({
+  type: 'data',
+  schema: z.object({
+    categories: z.array(
+      z.object({
+        title: z.string(),
+        text: z.string(),
+        href: z.string(),
+        image: z.string()
+      })
+    )
+  })
+});
+
 export const collections = {
-  posts
+  posts,
+  settings
 };

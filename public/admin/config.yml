@@ -5,7 +5,6 @@ backend:
   base_url: https://drobky.cz
   auth_endpoint: /cms-auth/auth
 
-
 local_backend: false
 
 site_url: https://drobky.cz
@@ -40,3 +39,21 @@ collections:
       - { label: Hlavní obrázek, name: coverImage, widget: image }
       - { label: Draft, name: draft, widget: boolean, default: false }
       - { label: Obsah, name: body, widget: markdown }
+  - name: settings
+    label: Nastavení webu
+    files:
+      - label: Rubriky
+        name: rubriky
+        file: src/content/settings/rubriky.yml
+        fields:
+          - label: Rubriky
+            name: categories
+            widget: list
+            summary: '{{fields.title}}'
+            min: 3
+            max: 3
+            fields:
+              - { label: Název, name: title, widget: string }
+              - { label: Popis, name: text, widget: string }
+              - { label: Odkaz, name: href, widget: string, hint: 'Např. /rybarina' }
+              - { label: Obrázek, name: image, widget: image }
