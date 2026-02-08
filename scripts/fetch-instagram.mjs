@@ -41,13 +41,20 @@ const fields = ['id', 'caption', 'media_type', 'media_url', 'thumbnail_url', 'pe
 const url = `https://graph.instagram.com/${userId}/media?fields=${fields}&access_token=${token}`;
 
 try {
+  const existing = await readExisting();
   const response = await fetch(url);
+  const raw = await response.text();
+  const json = raw ? JSON.parse(raw) : {};
 
   if (!response.ok) {
-    throw new Error(`Instagram API failed with status ${response.status}`);
+    const message = json?.error?.message ?? `Instagram API failed with status ${response.status}`;
+    throw new Error(message);
   }
 
-  const json = await response.json();
+  if (json?.error?.message) {
+    throw new Error(json.error.message);
+  }
+
   const items = (json.data ?? []).slice(0, 12).map((item) => ({
     id: item.id,
     caption: item.caption ?? '',
@@ -56,6 +63,15 @@ try {
     mediaType: item.media_type ?? '',
     timestamp: item.timestamp ?? ''
   }));
+
+  if (items.length === 0 && Array.isArray(existing.items) && existing.items.length > 0) {
+    await writePayload({
+      ...existing,
+      updatedAt: new Date().toISOString()
+    });
+    console.log('Instagram API returned 0 items, keeping previous cache.');
+    process.exit(0);
+  }
 
   await writePayload({
     updatedAt: new Date().toISOString(),
