@@ -5,7 +5,7 @@ backend:
   base_url: https://auth.drobky.cz
   auth_endpoint: /auth
 
-local_backend: true
+local_backend: false
 
 site_url: https://drobky.cz
 display_url: https://drobky.cz
