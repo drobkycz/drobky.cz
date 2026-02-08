@@ -2,8 +2,9 @@ backend:
   name: github
   repo: drobkycz/drobky.cz
   branch: main
-  base_url: https://auth.drobky.cz
-  auth_endpoint: /auth
+  base_url: https://drobky.cz
+  auth_endpoint: /cms-auth/auth
+
 
 local_backend: false
 
